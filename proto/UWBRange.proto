@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package dwm3000;
+
+message UWBRange {
+  uint64 stamp = 1;
+  uint32 source_id = 2;
+  uint32 destination_id = 3;
+  uint32 num_units = 4;
+  double tof = 5;
+  double range = 6;
+}

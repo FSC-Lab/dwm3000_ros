@@ -1,0 +1,5 @@
+{
+  "clangd.arguments": [
+    "--compile-commands-dir=/home/nx0/catkin_ws/build/dwm3000_ros"
+  ]
+}

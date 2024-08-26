@@ -5,9 +5,11 @@
 #include "ros/publisher.h"
 #include "ros/ros.h"
 
+#include "UWBRange.pb.h"
 #include "dwm3000_ros/UWBRange.h"
 #include "dwm3000_ros/utils.hpp"
 #include "fsc_serial/fsc_serial.hpp"
+#include "pb_decode.h"
 
 #define FWD(...) static_cast<decltype(__VA_ARGS__) &&>(__VA_ARGS__)
 
@@ -44,21 +46,24 @@ struct Dwm3000Ros::Impl {
   }
 
   void parsingCallback(std::uint8_t const *data, std::size_t size) {
-    using utils::Unpack;
-    if (data[0] != 0xFE || size < 24) {
+    dwm3000_UWBRange in_msg = dwm3000_UWBRange_init_zero;
+
+    pb_istream_t stream = pb_istream_from_buffer(data, size);
+
+    if (!pb_decode(&stream, dwm3000_UWBRange_fields, &in_msg)) {
+      ROS_ERROR_THROTTLE(1, "Decoding failed!");
       return;
     }
-    // TODO(Hs293Go): Finalize message definition and define size/offset enums
+
     dwm3000_ros::UWBRange msg;
     msg.header.stamp = ros::Time::now();
 
-    const unsigned char *packet_start = &data[0];
-    int length = Unpack<std::uint8_t>(packet_start + 1);
-    msg.sequence_number = Unpack<std::uint8_t>(packet_start + 2);
-    msg.source_id = Unpack<std::uint8_t>(packet_start + 3);
-    std::uint64_t stamp = Unpack<std::uint64_t>(packet_start + 4);
-    msg.range = Unpack<double>(packet_start + 12);
-    std::uint32_t crc32 = Unpack<std::uint32_t>(packet_start + 20);
+    msg.source_id = in_msg.source_id;
+    std::uint64_t stamp = in_msg.stamp;
+    msg.range = in_msg.range;
+    msg.destination_id = in_msg.destination_id;
+    msg.num_units = in_msg.num_units;
+    msg.tof = in_msg.tof;
     range_pub.publish(msg);
   }
 
