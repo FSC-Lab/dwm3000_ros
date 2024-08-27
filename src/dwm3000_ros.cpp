@@ -48,11 +48,10 @@ struct Dwm3000Ros::Impl {
   void parsingCallback(std::uint8_t const *data, std::size_t size) {
     dwm3000_UWBRange in_msg = dwm3000_UWBRange_init_zero;
 
-    pb_istream_t stream = pb_istream_from_buffer(data, size);
+    stream = pb_istream_from_buffer(data, size);
 
     if (!pb_decode(&stream, dwm3000_UWBRange_fields, &in_msg)) {
-      ROS_ERROR_THROTTLE(1, "Decoding failed!");
-      return;
+      ROS_WARN_THROTTLE(1, "Decoding failed: %s", PB_GET_ERROR(&stream));
     }
 
     dwm3000_ros::UWBRange msg;
@@ -70,6 +69,7 @@ struct Dwm3000Ros::Impl {
   ros::NodeHandle nh;
   fsc::CallbackSerial serial;
   ros::Publisher range_pub;
+  pb_istream_t stream;
 };
 
 Dwm3000Ros::Dwm3000Ros() : pimpl_(std::make_unique<Impl>()) {}
