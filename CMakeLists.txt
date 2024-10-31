@@ -40,7 +40,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}_proto
                       PUBLIC nanopb::protobuf-nanopb-static)
 
 add_library(${CMAKE_PROJECT_NAME} src/${CMAKE_PROJECT_NAME}.cpp)
-add_dependencies(${CMAKE_PROJECT_NAME}
+add_dependencies(${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_NAME}_generate_proto
                  ${${CMAKE_PROJECT_NAME}_EXPORTED_TARGETS})
 target_include_directories(
   ${CMAKE_PROJECT_NAME}
