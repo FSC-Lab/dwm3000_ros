@@ -5,7 +5,7 @@ find_package(fsc_serial CONFIG REQUIRED)
 find_package(nanopb REQUIRED)
 find_package(catkin REQUIRED COMPONENTS roscpp message_generation std_msgs)
 
-find_program(nanopb_GENERATOR nanopb_generator)
+find_program(nanopb_GENERATOR NAMES nanopb_generator nanopb_generator.py)
 
 add_message_files(DIRECTORY msg FILES UWBRange.msg)
 

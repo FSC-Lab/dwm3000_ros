@@ -1,24 +1,19 @@
-#include <utility>
-
 #include "dwm3000_ros/dwm3000_ros.hpp"
-#include "dwm3000_ros/utils.hpp"
-#include "ros/publisher.h"
-#include "ros/ros.h"
 
 #include "UWBRange.pb.h"
 #include "dwm3000_ros/UWBRange.h"
-#include "dwm3000_ros/utils.hpp"
 #include "fsc_serial/fsc_serial.hpp"
 #include "pb_decode.h"
+#include "ros/publisher.h"
+#include "ros/ros.h"
 
 #define FWD(...) static_cast<decltype(__VA_ARGS__) &&>(__VA_ARGS__)
 
 namespace nodelib {
 
-using namespace std::string_literals;
+using std::string_literals::operator""s;
 
 struct Dwm3000Ros::Impl {
-
   Impl() {
     ros::NodeHandle pnh("~");
 
@@ -41,7 +36,7 @@ struct Dwm3000Ros::Impl {
     range_pub = nh.advertise<dwm3000_ros::UWBRange>("/uwb/range", 1);
 
     serial.setCallback(
-        [this](auto &&... args) { parsingCallback(FWD(args)...); });
+        [this](auto &&...args) { parsingCallback(FWD(args)...); });
     return true;
   }
 
@@ -52,6 +47,7 @@ struct Dwm3000Ros::Impl {
 
     if (!pb_decode(&stream, dwm3000_UWBRange_fields, &in_msg)) {
       ROS_WARN_THROTTLE(1, "Decoding failed: %s", PB_GET_ERROR(&stream));
+      return;
     }
 
     dwm3000_ros::UWBRange msg;
@@ -80,6 +76,6 @@ bool Dwm3000Ros::openPort(const std::string &device, std::int64_t baud) {
   return pimpl_->openPort(device, baud);
 }
 
-bool Dwm3000Ros::isOpen() { return pimpl_->serial.isOpen(); }
+bool Dwm3000Ros::isOpen() const { return pimpl_->serial.isOpen(); }
 
-} // namespace nodelib
+}  // namespace nodelib
