@@ -3,15 +3,11 @@ project(dwm3000_ros)
 
 find_package(fsc_serial CONFIG REQUIRED)
 find_package(nanopb REQUIRED)
-find_package(catkin REQUIRED COMPONENTS roscpp message_generation std_msgs)
+find_package(catkin REQUIRED COMPONENTS roscpp dwm3000_msgs)
 
 find_program(nanopb_GENERATOR NAMES nanopb_generator nanopb_generator.py)
 
-add_message_files(DIRECTORY msg FILES UWBRange.msg)
-
-generate_messages(DEPENDENCIES std_msgs)
-
-catkin_package(CATKIN_DEPENDS message_runtime std_msgs)
+catkin_package()
 
 if(NOT nanopb_GENERATOR)
   message(FATAL_ERROR "nanopb_generator not found")
@@ -26,8 +22,8 @@ set(PROTO_GEN_HEADERS ${PROTO_GEN_DIR}/UWBRange.pb.h)
 
 add_custom_command(
   OUTPUT ${PROTO_GEN_SOURCES} ${PROTO_GEN_HEADERS}
-  COMMAND ${nanopb_GENERATOR} ARGS -I ${CMAKE_SOURCE_DIR}/proto -D
-          ${PROTO_GEN_DIR} ${CMAKE_SOURCE_DIR}/proto/UWBRange.proto
+  COMMAND ${nanopb_GENERATOR} ARGS -I ${CMAKE_SOURCE_DIR}/../proto -D
+          ${PROTO_GEN_DIR} ${CMAKE_SOURCE_DIR}/../proto/UWBRange.proto
   COMMENT "Generating protobuf messages")
 
 add_custom_target(

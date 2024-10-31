@@ -1,0 +1,10 @@
+If:
+  PathMatch: src/at_dstwr/.*
+CompileFlags:
+  CompilationDatabase: .pio/build/at_dstwr_u1
+
+---
+If:
+  PathMatch: src/at_sstwr/.*
+CompileFlags:
+  CompilationDatabase: .pio/build/at_sstwr_u1

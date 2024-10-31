@@ -1,7 +1,7 @@
 #include "dwm3000_ros/dwm3000_ros.hpp"
 
 #include "UWBRange.pb.h"
-#include "dwm3000_ros/UWBRange.h"
+#include "dwm3000_msgs/UWBRange.h"
 #include "fsc_serial/fsc_serial.hpp"
 #include "pb_decode.h"
 #include "ros/publisher.h"
@@ -33,7 +33,7 @@ struct Dwm3000Ros::Impl {
       return false;
     }
 
-    range_pub = nh.advertise<dwm3000_ros::UWBRange>("/uwb/range", 1);
+    range_pub = nh.advertise<dwm3000_msgs::UWBRange>("/uwb/range", 1);
 
     serial.setCallback(
         [this](auto &&...args) { parsingCallback(FWD(args)...); });
@@ -50,7 +50,7 @@ struct Dwm3000Ros::Impl {
       return;
     }
 
-    dwm3000_ros::UWBRange msg;
+    dwm3000_msgs::UWBRange msg;
     msg.header.stamp = ros::Time::now();
 
     msg.source_id = in_msg.source_id;
