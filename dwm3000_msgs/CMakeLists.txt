@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.20.0)
 project(dwm3000_msgs)
 
-find_package(catkin REQUIRED COMPONENTS message_generation std_msgs)
+find_package(rosidl_default_generators REQUIRED)
+find_package(std_msgs REQUIRED)
 
-add_message_files(DIRECTORY msg FILES UWBRange.msg)
+rosidl_generate_interfaces(${PROJECT_NAME} "msg/UWBRange.msg" DEPENDENCIES
+                           std_msgs)
 
-generate_messages(DEPENDENCIES std_msgs)
-
-catkin_package(CATKIN_DEPENDS message_runtime std_msgs)
+ament_package()
