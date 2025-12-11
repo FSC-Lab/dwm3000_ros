@@ -1,9 +1,9 @@
 #include "dwm3000_ros/dwm3000_ros.hpp"
-#include "ros/init.h"
+#include "rclcpp/executors.hpp"
 
-int main(int argc, char **argv) {
-  ros::init(argc, argv, "dwm3000_ros_node");
-  nodelib::Dwm3000Ros node;
+int main(int argc, char** argv) {
+  rclcpp::init(argc, argv);
+  auto node = std::make_shared<nodelib::Dwm3000Ros>();
 
-  ros::spin();
+  rclcpp::spin(node);
 }

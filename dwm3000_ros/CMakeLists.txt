@@ -1,13 +1,14 @@
 cmake_minimum_required(VERSION 3.20.0)
 project(dwm3000_ros)
 
-find_package(fsc_serial CONFIG REQUIRED)
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+
+find_package(fsc_serial REQUIRED)
 find_package(nanopb REQUIRED)
-find_package(catkin REQUIRED COMPONENTS roscpp dwm3000_msgs)
+find_package(dwm3000_msgs REQUIRED)
 
 find_program(nanopb_GENERATOR NAMES nanopb_generator nanopb_generator.py)
-
-catkin_package()
 
 if(NOT nanopb_GENERATOR)
   message(FATAL_ERROR "nanopb_generator not found")
@@ -44,8 +45,12 @@ target_include_directories(
   PRIVATE ${PROTO_GEN_DIR})
 target_link_libraries(
   ${CMAKE_PROJECT_NAME}
-  PUBLIC fsc_serial::fsc_serial ${catkin_LIBRARIES}
+  PUBLIC fsc_serial::fsc_serial rclcpp::rclcpp ${dwm3000_msgs_TARGETS}
          nanopb::protobuf-nanopb-static ${CMAKE_PROJECT_NAME}_proto)
 
 add_executable(${CMAKE_PROJECT_NAME}_node src/${CMAKE_PROJECT_NAME}_node.cpp)
 target_link_libraries(${CMAKE_PROJECT_NAME}_node PUBLIC ${CMAKE_PROJECT_NAME})
+
+# Install the node to lib/<package_name>. This is CRITICAL for 'ros2 run'.
+install(TARGETS ${CMAKE_PROJECT_NAME}_node DESTINATION lib/${PROJECT_NAME})
+ament_package()

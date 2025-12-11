@@ -1,23 +1,18 @@
 <?xml version="1.0"?>
-<package>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>dwm3000_ros</name>
   <version>0.0.2</version>
   <description>DWM3000 ROS</description>
   <maintainer email="hellston20a@gmail.com">Hs293Go</maintainer>
-
   <license>MIT</license>
-
-  <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>roscpp</build_depend>
-  <build_depend>dwm3000_msgs</build_depend>
-  <run_depend>roscpp</run_depend>
-  <run_depend>dwm3000_msgs</run_depend>
-
-
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+  <depend>fsc_serial</depend>
+  <depend>nanopb</depend>
+  <depend>dwm3000_msgs</depend>
   <!-- The export tag contains other, unspecified, tags -->
   <export>
-    <!-- Other tools can request additional information be placed here -->
-
+    <build_type>ament_cmake</build_type>
   </export>
 </package>
-
